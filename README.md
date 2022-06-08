@@ -12,4 +12,4 @@ opencv-python==4.5.5.64
 # Training
 If you want to retrain our network, we recommend that you follow these steps.
 
-1. 
+1. Matching experiments according to the above.
