@@ -6,6 +6,9 @@ algorithms = {
     };
 
 datasets = {
+   'RGBD135';
+   'NLPR';
+   'NJUD';
    'SIP';
    'LFSD';
    'STEREO797';
