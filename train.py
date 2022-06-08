@@ -27,8 +27,7 @@ import pytorch_iou
 from lib.utils import load_model
 
 DATA_PATH = "./data/RGBD_sal/train"
-TEST_PATH = [
-           './data/RGBD_sal/test_in_train/test_in_train']
+TEST_PATH = ['./data/RGBD_sal/test_in_train/test_in_train']
 
 
 writer = SummaryWriter('./write'+'summary')
