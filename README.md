@@ -23,4 +23,14 @@ If you want to retrain our network, we recommend that you follow these steps.
 5. Open terminal. run：python3 train.py
 
 ## Testing
+If you would like to reproduce our results, please follow the steps below.
 
+1. We provide a link to download the parameters of the trained model.
+
+2. Place the parametric model under the 'best/modal/' path.
+
+3. Open terminal. run：python3 test.py
+
+4. We also provide links to download the results of our experiments.
+
+## Testing
