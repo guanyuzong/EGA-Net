@@ -25,7 +25,7 @@ If you want to retrain our network, we recommend that you follow these steps.
 ## Testing
 If you would like to reproduce our results, please follow the steps below.
 
-1. We provide a link to download the parameters of the trained model.
+1. We provide a link to download the parameters of the trained model [code:0617]https://pan.baidu.com/s/1ZsddhG5dm6PHByvzaUSS0w.
 
 2. Place the parametric model under the 'best/modal/' path.
 
