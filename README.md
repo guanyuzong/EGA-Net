@@ -12,6 +12,6 @@ opencv-python==4.5.5.64
 # Training
 If you want to retrain our network, we recommend that you follow these steps.
 
-1. Match the experimental environment according to the above.
+1. Complete the experimental environment in accordance with the above.
 
 2. 
