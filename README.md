@@ -16,9 +16,9 @@ If you want to retrain our network, we recommend that you follow these steps.
 
 2. Modify the parameters in train.py according to your computer configuration, such as gpu, batchsize.
 
-3. Download the dataset and place it in the data folder.
+3. Download the dataset and place it in the data folder [code:0617]https://pan.baidu.com/s/10g1can5GKMoO5Vm238aFEw.
 
-4. Download the pre-trained model of Resnet-50 and place it in the model_zoo folder.
+4. Download the pre-trained model of Resnet-50 and place it in the model_zoo folder [code:0617]https://pan.baidu.com/s/1QMhpxyenTbiBFIhPbezU4g.
 
 5. Open terminal. run：python3 train.py
 
@@ -31,7 +31,7 @@ If you would like to reproduce our results, please follow the steps below.
 
 3. Open terminal. run：python3 test.py
 
-4. We also provide links to download the results of our experiments.
+4. We also provide links to download the results of our experiments [code:0617]https://pan.baidu.com/s/1RnS6BDDAg4tGOxEnNGXLrQ.
 
 ## Evaluation
 If you would like to evaluate our entire model parameters through quantitative metrics, please follow these steps.
