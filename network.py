@@ -38,19 +38,19 @@ class FAM(nn.Module):
     def forward(self, left, down):
         down_mask = self.conv_d1(down)
         left_mask = self.conv_l(left)
-        if down.size()[2:] != left_mask.size()[2:]:   #如果down和left的除了通道参数不一致（因为通道数可以由conv_d1等化为一样）
-            down_ = F.interpolate(down, size=left.size()[2:], mode='bilinear')    #那么通过双线性插值将图片的大小改为一致，这样才可以进行融合
-            z1 = F.relu(left_mask * down_, inplace=True)    #进行融合 multiplication  #公式12
+        if down.size()[2:] != left_mask.size()[2:]:  
+            down_ = F.interpolate(down, size=left.size()[2:], mode='bilinear')    
+            z1 = F.relu(left_mask * down_, inplace=True)    
         else:
             z1 = F.relu(left_mask * down, inplace=True)
 
         if down_mask.size()[2:] != left.size()[2:]:
             down_mask = F.interpolate(down_mask, size=left.size()[2:], mode='bilinear')
 
-        z2 = F.relu(down_mask * left, inplace=True)    #公式11               #z1，z2是分别经过卷积与未经过卷积的进行点乘
+        z2 = F.relu(down_mask * left, inplace=True)                 
 
-        out = torch.cat((z1, z2), dim=1)          #进行concatenating dim表示串联的方式
-        return F.relu(self.bn3(self.conv3(out)), inplace=True)  #公式13         256
+        out = torch.cat((z1, z2), dim=1)         
+        return F.relu(self.bn3(self.conv3(out)), inplace=True) 
 
 class CAM(nn.Module):
     def  __init__(self,input_channel,output_channel,norm_layer = nn.BatchNorm2d):
@@ -129,12 +129,12 @@ class DAM (nn.Module):
 
 
 
-class CCA(nn.Module):          #模块是为了S 公式4，5，6     减少特征冗余，提炼更加精确的特征
+class CCA(nn.Module):          
     def __init__(self, in_channel, ratio, out_channel):
         super(CCA, self).__init__()
 
         self.conv1 = nn.Conv2d(in_channel, out_channel, kernel_size=3, stride=1, padding=1)
-        self.max_pool = nn.AdaptiveMaxPool2d(1)  # 全局最大平均池化，将H*W转化为1
+        self.max_pool = nn.AdaptiveMaxPool2d(1) 
         self.avg_pool = nn.AdaptiveAvgPool2d(1)
 
         self.fc1 = nn.Conv2d(out_channel, out_channel // ratio, 1, bias=False)
@@ -163,7 +163,7 @@ class SA(nn.Module):    #空间注意力机制，先将通道数转化为1
     def forward(self, x1, x2):
         max_out, _ = torch.max(x2, dim=1, keepdim=True)
         avg_out = torch.mean(x2, dim=1, keepdim=True)
-        x2 = torch.cat([avg_out, max_out], dim=1)#寻求每一行的最大值，将通道数转化为1
+        x2 = torch.cat([avg_out, max_out], dim=1)
         x2 = self.conv1(x2)
         return self.sigmoid(x2) * x1
 
@@ -184,25 +184,25 @@ class CMAT(nn.Module):
 
 
     def forward(self, rgb, depth, beta, gamma,gate):
-        rgb = self.CCA1(rgb)                #生成rb上标以输入到Adr   256
+        rgb = self.CCA1(rgb)                
         depth = self.CCA2(depth)
-        if self.CA:                            #生成对称的fdr和frd
+        if self.CA:                            
             feat_1 = self.att1(rgb, depth)
             feat_2 = self.att2(depth, rgb)
         else:
             w1 = self.conv2(rgb)
-            w2 = self.conv3(depth)           #256
+            w2 = self.conv3(depth)          
             feat_1 = F.relu(w2*rgb, inplace=True)
             feat_2 = F.relu(w1*depth, inplace=True)
 
         out1 = rgb + gate * beta * feat_1
-        out2 = depth + gamma * feat_2       #生成out1和out2   公式9和10
+        out2 = depth + gamma * feat_2      
 
         return out1, out2
 
 
 class Fusion(nn.Module):
-    def __init__(self, in_channel, norm_layer=nn.BatchNorm2d):        #公式14，15，16函数所需要的卷积模块
+    def __init__(self, in_channel, norm_layer=nn.BatchNorm2d):       
         super(Fusion, self).__init__()
         self.conv0 = nn.Conv2d(in_channel*2, 256, 3, 1, 1)
         self.bn0 = norm_layer(256)
@@ -211,7 +211,7 @@ class Fusion(nn.Module):
         out1 = alpha * x1 + beta*(1.0 - alpha) * x2
         out2 = x1 * x2
         out  = torch.cat((out1, out2), dim=1)
-        out = F.relu(self.bn0(self.conv0(out)), inplace=True)     #公式14，15，16 生成最终fsal
+        out = F.relu(self.bn0(self.conv0(out)), inplace=True)    
 
         return out
 
@@ -288,7 +288,7 @@ class Segment(nn.Module):
         self.cmat2 = CMAT(channels[0], 64, True)     #256
 
         # low-level & high-level
-        self.fam54_1 = FAM(256, 256)                         #F特征融合
+        self.fam54_1 = FAM(256, 256)                        
         self.fam43_1 = FAM(256, 256)
         self.fam32_1 = FAM(256, 256)
         self.fam54_2 = FAM(256, 256)
@@ -329,8 +329,8 @@ class Segment(nn.Module):
             self.side_fusion4 = nn.Conv2d(256,1,kernel_size=3,stride=1,padding=1)
         self.linear_out = nn.Conv2d(256, 1, kernel_size=3, stride=1, padding=1)
         self.gap1 = nn.AdaptiveAvgPool2d(1)
-        self.gap2 = nn.AdaptiveAvgPool2d(1)              #将辅助图全部转化为尺度为1，而通数不变
-        self.fc = nn.Sequential(                         #Sequential 就是将自己想要的函数组成一个模块导入网络
+        self.gap2 = nn.AdaptiveAvgPool2d(1)           
+        self.fc = nn.Sequential(                         
                    nn.Linear(channels[-1]*2, 512),
                    ##nn.Dropout(p=0.3),
                    nn.ReLU(True),
@@ -343,24 +343,24 @@ class Segment(nn.Module):
     def forward(self, rgb, depth):
         raw_size = rgb.size()[2:]
         bz = rgb.shape[0]
-        enc2_1, enc3_1, enc4_1, enc5_1 = self.backbone_rgb(rgb)   #rgb结构
+        enc2_1, enc3_1, enc4_1, enc5_1 = self.backbone_rgb(rgb) 
         enc2_2, enc3_2, enc4_2, enc5_2 = self.backbone_d(depth)
 
         rgb_gap = self.gap1(enc5_1)
         rgb_gap = rgb_gap.view(bz, -1)
-        depth_gap = self.gap2(enc5_2)                           #GAP
+        depth_gap = self.gap2(enc5_2)                        
         depth_gap = depth_gap.view(bz, -1)
         feat = torch.cat((rgb_gap, depth_gap), dim=1)
         feat = self.fc(feat)
 
         gate = feat[:, -1].view(bz, 1, 1, 1)
 
-        alpha = feat[:, :256]                                   #关于g和alpha
+        alpha = feat[:, :256]                                  
         alpha = alpha.view(bz, 256, 1, 1)
 
 
         out5_1, out5_2 = self.cmat5(enc5_1, enc5_2,1,1,gate)
-        fir4_1, fir4_2   = self.cmat4(enc4_1, enc4_2,1,1, gate)    #4个GMA 其中out5_1是rgb框架 其中将de4_1改为fir4_1,以用来区别修改的模块
+        fir4_1, fir4_2   = self.cmat4(enc4_1, enc4_2,1,1, gate)  
         fir3_1, fir3_2   = self.cmat3(enc3_1, enc3_2,1,1, gate)
         fir2_1, fir2_2   = self.cmat2(enc2_1, enc2_2,1,1, gate)
 
