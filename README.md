@@ -1,6 +1,15 @@
 # EGA-Net
 EGA-Net: Edge Feature Enhancement and Global Information Attention Network for RGB-D Salient Object Detection
+
+## Attention!!!
+1. It is recommended to reproduce our code in the Linux system. 
+
+2. If you want to run the test.py in Windows, please make sure that the path where you save the test results exists.
+
 ## Experimental environment 
+
+python==3.7.0
+
 pytorch==1.8.0
 
 torchvision==0.9.0
