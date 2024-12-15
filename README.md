@@ -40,7 +40,7 @@ If you would like to reproduce our results, please follow these steps.
 
 3. Open terminal. run：python3 test.py
 
-4. We also provide links to download the results of our experiments [code:0617]https://pan.baidu.com/s/1RnS6BDDAg4tGOxEnNGXLrQ.
+4. We also provide links to download the results of our experiments [0617] https://pan.baidu.com/s/1RQ3L--14CQCHox2W6Wp-dQ].
 
 ## Evaluation
 If you would like to evaluate our entire model parameters through quantitative metrics, please follow these steps.
