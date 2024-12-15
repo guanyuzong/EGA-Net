@@ -27,7 +27,7 @@ If you want to retrain our network, we recommend that you follow these steps.
 
 3. Download the dataset and place it in the data folder [code:0617]https://pan.baidu.com/s/10g1can5GKMoO5Vm238aFEw.
 
-4. Download the pre-trained model of Resnet-50 and place it in the model_zoo folder [code:0617]https://pan.baidu.com/s/1QMhpxyenTbiBFIhPbezU4g.
+4. Download the pre-trained model of Resnet-50 and place it in the model_zoo folder [0617] https://pan.baidu.com/s/10uVVY3lvAQ9V0onh0VQlwA.
 
 5. Open terminal. run：python3 train.py
 
